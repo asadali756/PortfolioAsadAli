@@ -46,8 +46,10 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 
 .typing-container{
     display:inline-block;
-    width:700px;      /* longest text ke liye */
+    max-width:100%;
+    overflow:hidden;
     white-space:nowrap;
+    vertical-align:bottom;
 }
 
 #typing-text{
@@ -173,7 +175,7 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
         <div class="grid md:grid-cols-2 gap-12 items-start">
 
             <!-- LEFT -->
-            <div>
+            <div class="min-w-0">
 
                 <p class="reveal text-sm font-medium text-accent tracking-widest uppercase mb-4">
                     Available for work
@@ -922,7 +924,6 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
   // Saal (year) automatically update karne ke liye
   document.getElementById('yr').textContent = new Date().getFullYear();
 </script>
-
 <script>
 function app() {
   return {
@@ -956,7 +957,7 @@ function app() {
     updateSection() {
       const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
       if (atBottom) { this.s = 'contact'; return; }
-      const ids = ['contact','blog','reviews','about','work','services','hero'];
+      const ids = ['contact','certificates','reviews','about','work','services','hero'];
       for (const id of ids) {
         const el = document.getElementById(id);
         if (el && window.scrollY >= el.offsetTop - 130) { this.s = id; return; }
@@ -975,10 +976,32 @@ const words = [
 ];
 
 const typingText = document.getElementById("typing-text");
+const typingContainer = document.querySelector(".typing-container");
+const heroHeading = document.querySelector("#hero h1");
 
 let wordIndex = 0;
 let charIndex = 0;
 let deleting = false;
+
+// Shrinks the typing text's font-size until it fits inside the available width.
+// This runs on every keystroke and on window resize, so it works for any
+// word length and any screen size — nothing ever gets clipped.
+function fitTypingText() {
+    if (!typingContainer || !heroHeading) return;
+
+    const baseFontSize = parseFloat(getComputedStyle(heroHeading).fontSize);
+    let fontSize = baseFontSize;
+    typingContainer.style.fontSize = fontSize + "px";
+
+    const availableWidth = heroHeading.clientWidth;
+    let safety = 0;
+
+    while (typingContainer.scrollWidth > availableWidth && fontSize > 16 && safety < 60) {
+        fontSize -= 1;
+        typingContainer.style.fontSize = fontSize + "px";
+        safety++;
+    }
+}
 
 function typeEffect() {
 
@@ -988,6 +1011,7 @@ function typeEffect() {
 
         typingText.textContent = currentWord.substring(0, charIndex + 1);
         charIndex++;
+        fitTypingText();
 
         if (charIndex === currentWord.length) {
             deleting = true;
@@ -999,6 +1023,7 @@ function typeEffect() {
 
         typingText.textContent = currentWord.substring(0, charIndex - 1);
         charIndex--;
+        fitTypingText();
 
         if (charIndex === 0) {
             deleting = false;
@@ -1009,6 +1034,9 @@ function typeEffect() {
 
     setTimeout(typeEffect, deleting ? 50 : 100);
 }
+
+// Re-check sizing whenever the window is resized (e.g. rotating a phone)
+window.addEventListener('resize', fitTypingText);
 
 typeEffect();
 </script>
