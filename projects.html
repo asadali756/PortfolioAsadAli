@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" x-data="projects()" :class="{'dark':dark}" x-init="init()" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Social Media & Open Graph -->
+<meta property="og:title" content="Asad Ali — Full Stack Developer & Designer">
+<meta property="og:description" content="Building high-performance digital products from backend logic to intuitive user interfaces.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://privtasad.com"> <!-- Yahan apna domain ya GitHub link update kar lein -->
+<link rel="icon" type="image/png" href="MyProjectpics/favicon.png">
+<title>Asad Ali — Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet"/>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['PT Sans','sans-serif'],body:['DM Sans','sans-serif']},colors:{accent:'#FF6B2B','accent-light':'#FF8F5C'}}}}</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;}
+    html{font-family:'DM Sans',sans-serif;}
+    h1,h2,h3,h4,h5,h6{font-family:'PT Sans',sans-serif;}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .nav-link{position:relative;}
+    .nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:currentColor;transition:width .25s cubic-bezier(.4,0,.2,1);}
+    .nav-link:hover::after{width:100%;}
+    ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:#FF6B2B;border-radius:99px;}
+    body{transition:background-color .3s,color .3s;}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
+    .btn-primary{position:relative;overflow:hidden;}
+    .btn-primary::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
+    .btn-primary:hover::after{left:160%;}
+    [x-cloak]{display:none!important;}
+    .photo-frame{position:relative;overflow:hidden;background:#f4f4f5;display:flex;align-items:center;justify-content:center;}
+    .photo-frame img{width:100%;height:100%;object-fit:contain;display:block;}
+    .project-card{transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .2s;}
+    .project-card:hover{transform:translateY(-4px);}
+
+    /* modal */
+    .modal-backdrop{background:rgba(24,24,27,.6);backdrop-filter:blur(4px);}
+    .modal-panel{max-height:88vh;}
+    .modal-scroll::-webkit-scrollbar{width:6px;}
+    .modal-scroll::-webkit-scrollbar-thumb{background:#FF6B2B;border-radius:99px;}
+  </style>
+</head>
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-body antialiased">
+
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+    :class="scrolled?'bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md shadow-sm shadow-black/5':'bg-transparent'">
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display font-bold text-xl tracking-tight z-10">
+        <span class="text-zinc-900 dark:text-white">port</span><span class="text-accent">folio</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+<ul class="hidden md:flex items-center gap-8 text-sm" role="list">
+  <li><a href="#services" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='services'?'on !text-zinc-900 dark:!text-white':''">Services</a></li>
+  <li><a href="#work"     class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='work'?'on !text-zinc-900 dark:!text-white':''">Work</a></li>
+  <li><a href="#about"   class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
+  <li><a href="#certificates" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='certificates'?'on !text-zinc-900 dark:!text-white':''">Certificate/Achievement</a></li>
+  <li><a href="#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+</ul>
+      <div class="flex items-center gap-3">
+        <button @click="dark=!dark;localStorage.setItem('theme',dark?'dark':'light')" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark?'Light mode':'Dark mode'">
+          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        </button>
+        <a href="index.html#contact" class="hidden md:inline-flex items-center gap-2 btn-primary bg-accent text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-accent-light transition-colors">Hire me &rarr;</a>
+        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div x-show="mobileMenu" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden bg-white dark:bg-zinc-950 border-t border-zinc-100 dark:border-zinc-900">
+      <ul class="flex flex-col px-6 py-4 gap-4 text-sm font-medium">
+        <li><a href="index.html#services" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Services</a></li>
+        <li><a href="projects.html" class="block text-accent font-medium">Work</a></li>
+        <li><a href="index.html#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">About</a></li>
+        <!-- <li><a href="blog.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Blog</a></li> -->
+        <li><a href="index.html#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="pt-36 pb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Featured Builds</p>
+        <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">My Projects</h1>
+        <p class="reveal text-lg text-zinc-500 dark:text-zinc-400 max-w-xl leading-relaxed mb-8">Building high-performance digital products. Bridging robust backend logic with seamless, user-centric interfaces.</p>
+        <div class="reveal flex flex-wrap gap-2">
+          <template x-for="f in filterOptions" :key="f.value">
+            <button
+              @click="filter = f.value"
+              :class="filter === f.value ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-accent'"
+              class="text-sm px-4 py-1.5 rounded-full border transition-colors"
+              x-text="f.label">
+            </button>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <section class="pb-24">
+      <div class="max-w-6xl mx-auto px-6">
+        <!--
+          CORRECTIF : on itere sur TOUS les projets, x-show + x-transition gerent
+          la visibilite de chaque carte. L'ancienne version utilisait x-for sur
+          filteredProjects (computed), ce qui forcait un re-render complet du DOM
+          a chaque changement de filtre — detruisant les classes .reveal et cachant
+          tout le contenu.
+        -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <template x-for="p in allProjects" :key="p.id">
+            <div
+              x-show="filter === 'all' || p.category === filter"
+              x-transition:enter="transition ease-out duration-300"
+              x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+              x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+              x-transition:leave="transition ease-in duration-200"
+              x-transition:leave-start="opacity-100 scale-100"
+              x-transition:leave-end="opacity-0 scale-95">
+              <article class="project-card group h-full flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent transition-colors">
+                <button @click="openProject(p)" class="block photo-frame w-full h-52">
+                  <img :src="p.img" :alt="p.title" loading="lazy"/>
+                </button>
+                <div class="p-6 flex flex-col flex-1">
+                  <div class="flex flex-wrap items-center gap-2 mb-3">
+                    <template x-for="tag in p.tags" :key="tag">
+                      <span class="text-xs px-2.5 py-1 rounded-full"
+                        :class="tag === p.categoryLabel ? 'bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'"
+                        x-text="tag"></span>
+                    </template>
+                    <span class="text-xs px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 ml-auto" x-text="p.year"></span>
+                  </div>
+                  <button @click="openProject(p)" class="text-left">
+                    <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="p.title"></h3>
+                  </button>
+                  <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4" x-text="p.desc"></p>
+                  <div class="mt-auto pt-1">
+                    <button @click="openProject(p)" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-light transition-colors">
+                      View details
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </template>
+        </div>
+        <div x-show="visibleCount === 0" x-cloak class="text-center py-20">
+          <p class="text-zinc-400 text-sm">No projects in this category yet.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Project details modal -->
+  <div
+    x-show="selectedProject !== null"
+    x-cloak
+    class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+    @keydown.escape.window="closeProject()">
+    <div
+      x-show="selectedProject !== null"
+      x-transition:enter="transition ease-out duration-250"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-150"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="absolute inset-0 modal-backdrop"
+      @click="closeProject()"></div>
+
+    <div
+      x-show="selectedProject !== null"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+      x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100 scale-100"
+      x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+      class="modal-panel relative z-10 w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-2xl shadow-black/20 flex flex-col"
+      @click.stop
+      x-cloak>
+
+      <button @click="closeProject()" aria-label="Close" class="absolute top-4 right-4 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 backdrop-blur text-zinc-700 dark:text-zinc-200 hover:bg-accent hover:text-white transition-colors shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <template x-if="selectedProject">
+        <div class="overflow-y-auto modal-scroll">
+          <div class="photo-frame w-full h-64 sm:h-80 bg-zinc-100 dark:bg-zinc-800">
+            <img :src="selectedProject.img" :alt="selectedProject.title" class="w-full h-full object-contain"/>
+          </div>
+          <div class="p-6 sm:p-8">
+            <div class="flex flex-wrap items-center gap-2 mb-4">
+              <template x-for="tag in selectedProject.tags" :key="tag">
+                <span class="text-xs px-2.5 py-1 rounded-full"
+                  :class="tag === selectedProject.categoryLabel ? 'bg-orange-50 dark:bg-zinc-800 text-accent border border-orange-200 dark:border-zinc-700' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'"
+                  x-text="tag"></span>
+              </template>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 ml-auto" x-text="selectedProject.year"></span>
+            </div>
+            <h2 class="font-display font-bold text-2xl sm:text-3xl text-zinc-900 dark:text-white mb-3" x-text="selectedProject.title"></h2>
+            <p class="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6" x-text="selectedProject.desc"></p>
+            <div class="flex flex-wrap gap-3">
+              <a :href="selectedProject.url" class="inline-flex items-center gap-2 btn-primary bg-accent text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-accent-light transition-colors">
+                Visit project &rarr;
+              </a>
+              <button @click="closeProject()" class="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:border-accent hover:text-accent transition-colors">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+<footer class="border-t border-zinc-100 dark:border-zinc-900">
+  <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col items-center justify-center gap-2">
+    <p class="text-xs text-zinc-400">© <span id="yr"></span> Copy All rights reserved.</p>
+    <p class="text-xs text-zinc-500">
+      <!-- Links here -->
+    </p>
+  </div>
+</footer>
+
+<script>
+function projects() {
+  return {
+    // ---- theme & nav state ----
+    dark: localStorage.getItem('theme') === 'dark' ||
+          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches),
+    mobileMenu: false,
+    scrolled: false,
+
+    // ---- modal state ----
+    selectedProject: null,
+    openProject(p) {
+      this.selectedProject = p;
+      document.body.style.overflow = 'hidden';
+    },
+    closeProject() {
+      this.selectedProject = null;
+      document.body.style.overflow = '';
+    },
+
+    init() {
+      // scroll listener for header background
+      window.addEventListener('scroll', () => {
+        this.scrolled = window.scrollY > 10;
+      });
+
+      // reveal animation on scroll
+      const revealEls = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      revealEls.forEach(el => observer.observe(el));
+
+      // footer year
+      const yearEl = document.getElementById('year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+    },
+
+    // ---- filter state ----
+    filter: 'all',
+
+    filterOptions: [
+      { value: 'all',         label: 'All' },
+      { value: 'react',       label: 'React' },
+      { value: 'application', label: 'Application' },
+      { value: 'ml',          label: 'ML' },
+      { value: 'php',         label: 'PHP' }
+    ],
+
+    // ---- projects data ----
+    allProjects: [
+      {
+        id: 1, title: 'AspireEdge', category: 'application', categoryLabel: 'Application',
+        tags: ['Application', 'Career Platform'],
+        desc: 'A career-guidance application helping users discover and plan their professional path.',
+        img: 'MyProjectpics/AspireEdgeApp.png', url: '#', year: '2025'
+      },
+      {
+        id: 2, title: 'EcoCycle', category: 'application', categoryLabel: 'Application',
+        tags: ['Application', 'Sustainability'],
+        desc: 'An application promoting recycling and eco-friendly habits through smart tracking.',
+        img: 'MyProjectpics/EcoCycleApp.png', url: '#', year: '2025'
+      },
+      {
+        id: 3, title: 'LaptopHarbor', category: 'application', categoryLabel: 'Application',
+        tags: ['Application', 'E-commerce'],
+        desc: 'A marketplace application for browsing and purchasing laptops with ease.',
+        img: 'MyProjectpics/LaptopHarborApp.png', url: '#', year: '2025'
+      },
+      {
+        id: 4, title: 'TripBudgetere', category: 'application', categoryLabel: 'Application',
+        tags: ['Application', 'Travel'],
+        desc: 'A travel budgeting application that helps plan and manage trip expenses smartly.',
+        img: 'MyProjectpics/TripBudgtereApp.png', url: '#', year: '2025'
+      },
+      {
+        id: 5, title: 'ReactAdmin EcoCycle', category: 'react', categoryLabel: 'React',
+        tags: ['React', 'Admin Dashboard'],
+        desc: 'A React-based admin dashboard for managing the EcoCycle platform data and users.',
+        img: 'MyProjectpics/ReactAdminEcocycle.png', url: '#', year: '2025'
+      },
+      {
+        id: 6, title: 'EventSphere', category: 'react', categoryLabel: 'React',
+        tags: ['React', 'Events'],
+        desc: 'A React application for discovering, creating, and managing events seamlessly.',
+        img: 'MyProjectpics/EventSphereProjectReact.png', url: '#', year: '2025'
+      },
+      {
+        id: 7, title: 'Gym Management', category: 'php', categoryLabel: 'PHP',
+        tags: ['PHP', 'Management System'],
+        desc: 'A PHP-based gym management system for handling memberships, plans, and schedules.',
+        img: 'MyProjectpics/GymphpProject.jpg', url: '#', year: '2024'
+      },
+      {
+        id: 8, title: 'Courier Management', category: 'php', categoryLabel: 'PHP',
+        tags: ['PHP', 'Logistics'],
+        desc: 'A PHP-based courier management system for tracking shipments and deliveries.',
+        img: 'MyProjectpics/CourierphpProject.jpg', url: '#', year: '2024'
+      },
+      {
+        id: 9, title: 'EarthScape Climate Agency', category: 'ml', categoryLabel: 'ML',
+        tags: ['Machine Learning', 'Climate Data'],
+        desc: 'A machine learning project analyzing and predicting climate patterns for a climate agency.',
+        img: 'MyProjectpics/EarthScapeClimateAgencyMl.png', url: '#', year: '2026'
+      }
+    ],
+
+    get visibleCount() {
+      return this.allProjects.filter(
+        p => this.filter === 'all' || p.category === this.filter
+      ).length;
+    }
+  };
+}
+</script>
+</body>
+</html>
